@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>10 pls</title>
+    <script type="application/javascript" src="js/jquery-2.0.2.min.js"></script>
+    <script type="application/javascript" src="js/stats.js"></script>
+    <script type="application/javascript" src="js/background.js"></script>
+    <script type="application/javascript" src="js/modernizr-2.6.2.min.js"></script>
+    <script type="application/javascript" src="js/gumby.min.js"></script>
+    <script type="application/javascript" src="js/lettering.js"></script>
+    <script type="application/javascript" src="js/textillate.js"></script>
+    <script type="application/javascript" src="js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/background.css">
+    <link rel="stylesheet" type="text/css" href="css/gumby.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body>
+    <div id="canvas-div">
+        <canvas id="canvas"></canvas>
+    </div>
+    <div class="window main">
+
+        <div style="text-align:center"><h3>disk Management</h3></div>
+        <div class="disk">
+			<div class="row">
+				<h4 id="disk-name-heading"></h4>
+			</div>
+
+            <div class="row">
+                <div class="ten columns centered">
+                    <form>
+                        <ul>
+                            <li class="field">
+                                <input class="xnarrow text input" id="new-point-value" type="text" placeholder="Enter address" />
+                                <p class="btn info medium" id="new-point-button">
+                                    <a href="#">New point</a>
+                                </p>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+
+                <div id="line1" class="ten columns centered" style="height: 10px; border-bottom: 1px solid white; overflow: visible;">
+                    <div style="height: 100%; width: 0px; border-right: 1px solid white; float: right;"></div>
+                </div>
+
+                <div id="path1" class="ten columns centered" style="height: 10px;">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+
+        <p class="btn info medium" id="new-disk-button">
+            <a href="#" gumby-trigger="#modal1" class="switch">New disk</a>
+        </p>
+
+    </div>
+
+    <div class="modal" id="modal1">
+        <div class="content">
+            <a class="close switch" gumby-trigger="|#modal1"><i class="icon-cancel" /></i></a>
+            <div class="row">
+                <div class="ten columns centered text-center">
+                    <h2>Customize disk</h2>
+                    <p></p>
+                </div>
+            </div>
+
+            <form>
+                <fieldset>
+                    <legend id="disk-name">Fancy disk</legend>
+                    <ul>
+                        <li class="field">
+                            <label class="inline" for="name">Name</label>
+                            <input class="wide text input" id="name" type="text" placeholder="Enter disk name" />
+                        </li>
+                        <li class="field">
+                            <label class="inline" for="memory">Memory</label>
+                            <input class="wide text input" id="memory" type="text" placeholder="Enter disk memory" />
+                        </li>
+                    </ul>
+                </fieldset>
+            </form>
+
+            <p class="btn success medium" id="create-disk">
+                <a href="#" gumby-trigger="|#modal1" class="switch">Create</a>
+            </p>
+            <p class="btn danger medium">
+                <a href="#" gumby-trigger="|#modal1" class="switch">Cancel</a>
+            </p>
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>
