@@ -2,7 +2,8 @@ var disk = {
     name: "",
     memory: 0,
 	used: 0,
-    blockSize : 0
+    blockSize : 0,
+    position: 0
 }
 
 var memoryValue = "KB";
@@ -11,7 +12,7 @@ var ProcessCount = -1;
 var width = 1000;
 var position = 0;
 var counter = 0;
-var point = 0;
+//var point = 0;
 
 function Process(){
 	this.name = "";
@@ -24,7 +25,7 @@ $(document).ready(function () {
     changeName();
     $('.disk').hide();
 
-    createDisk('Test1', 100);
+    createDisk('Test1', 100, 53);
 
     $('#name').keyup(function(){changeName()});
 	$('#name2').keyup(function(){changeProcessName()});
@@ -35,27 +36,25 @@ $(document).ready(function () {
 
     $('#new-point-button').click(function() {
         var value = $('#new-point-value').val();
-        if(validateRange(value)) {
-            addPoint(value);
-            addPath(value);
-        } else {
-            alert('Please enter value that is in range 0 - ' + disk.memory);
-        }
+        addPoint(value);
     });
 
 });
 
-function createDisk(diskName, memory) {
+function createDisk(diskName, memory, startingPosition) {
     if(diskName == "" || diskName == null) {
         diskName = ("Fancy Pancy disk");
     }
     disk.name = diskName;
     disk.memory = memory;
+    disk.position = startingPosition;
     $('.disk').show();
     createLineSegments();
     $('#new-disk-button').hide();
     $('#disk-name-heading').text(diskName);
     $('#disk-name-heading').textillate({ in: { effect: 'fadeIn' } });
+    addPath(disk.position);
+    addToQueue(disk.position, true);
 }
 
 function addStartingPoint(memory) {
@@ -63,34 +62,45 @@ function addStartingPoint(memory) {
 }
 
 function addPoint(memory) {
-    $('.point:eq('+ memory +')').css('visibility', 'visible');
-    drawLine(memory);
-    counter++;
+    if(validateRange(memory)) {
+        $('.point:eq('+ memory +')').css('visibility', 'visible');
+        drawLine(memory);
+        counter++;
+        addPath(memory);
+        addToQueue(memory);
+    } else {
+        alert('Please enter value that is in range 0 - ' + disk.memory);
+    }
 }
 
 function drawLine(memory) {
-    var length = Math.sqrt((point - memory * disk.blockSize)*(point - memory * disk.blockSize) + (0 - 10)*(0 - 10) + 5);
-    var angle  = Math.atan2(10, memory * disk.blockSize - point) * 180 / Math.PI;
-    var transform = 'rotate('+angle+'deg)';
+    var length = Math.sqrt(((disk.position - memory) * disk.blockSize)*((disk.position - memory) * disk.blockSize) + (0 - 10)*(0 - 10) + 5);
+    var angle  = Math.atan2(10, (memory - disk.position) * disk.blockSize) * 180 / Math.PI;
+    var transform = 'rotate(' + angle + 'deg)';
+
+    var id = 'line' + counter;
 
     var line = $('<div>')
         .addClass('line')
+        .attr('id', id)
         .css({
             'position': 'relative',
             'transform': transform
         })
-        .width(length)
-        .offset({left: Math.min(point, memory * disk.blockSize), top: 0});
+        .width(0)
+        .offset({left: Math.min(disk.position * disk.blockSize, memory * disk.blockSize), top: 0});
 
-    point = memory * disk.blockSize;
+    move('#' + id, length);
+
+    disk.position = memory;
 
     $('#path1').append(line);
 }
 
 function createLineSegments() {
-    disk.blockSize = ($('#line1').width() - 2) / disk.memory;
+    disk.blockSize = ($('#ruler1').width() - 2) / disk.memory;
     for(var i = 0; i < disk.memory; i++) {
-        $('#line1').append('<div class="point" style="float: left;"></div>');
+        $('#ruler1').append('<div class="point" style="float: left;"></div>');
     }
     $('.point').css('width', disk.blockSize);
     $('.point').css('visibility', 'hidden');
@@ -118,4 +128,22 @@ function validateRange(data) {
 
 function addPath(value) {
     $('#path1').append('<div class="circle" style="margin-left: '+ (value * disk.blockSize) +'px;"></div>');
+}
+
+function addToQueue(value, first) {
+    $('.queue').append((first ? '' : ', ') + value);
+}
+
+function move(elem, length) {
+
+    var left = 0
+
+    function frame() {
+        left++  // update parameters
+        $(elem).width(left);// show frame
+        if (left >= length)  // check finish condition
+        clearInterval(id)
+    }
+
+    var id = setInterval(frame, 1) // draw every 10ms
 }
