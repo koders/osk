@@ -1,6 +1,60 @@
 body {
     font-family: "Open Sans";
+    overflow: auto;
+    background-color: white; 
+
+    font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
+}
+
+.window {
+    width: 1000px;
+    margin: auto;
+    margin-bottom: 0;
+}
+
+.window h1, .window h2 {
+    font-size: 3em;
+    text-align: center;
+}
+    
+.window form {
+    width: 80%;
+    margin: auto;
+    margin-top: 40px;
+}
+
+.drag-handle {
+    cursor: move;
+}
+
+.subtitle {
+    font-size: 0.5em;
+}
+
+#canvas {
+    width: 750px;
+    height: 300px;
+}
+
+.footer {
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.controls a {
+    color: black;
+}
+
+
+
+/*
+body {
+    font-family: "Open Sans";
     overflow-y: scroll;
+    background-color: #000;
 }
 
 h2 {
@@ -10,9 +64,9 @@ h2 {
 .window {
     width: 1000px;
     min-height: 100%;
-    /*border: 1px solid black;*/
+    border: 1px solid black;
     margin: auto;
-    background-color: rgba(0,0,0,0.9);
+    background-color: #2F3234;
     color: white;
 }
 
@@ -64,3 +118,4 @@ li.field-picker {
     border-radius: 2px;
     background-color: red;
 }
+*/
