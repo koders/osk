@@ -1,149 +1,193 @@
-var disk = {
-    name: "",
-    memory: 0,
-	used: 0,
-    blockSize : 0,
-    position: 0
-}
+var editableList, // sortable queue
+    queue = [], // array with queue points
+    minQueue = 0,
+    maxQueue = 100,
+    canvas,
+    ctx,
+    canvasWidthStep,
+    canvasHeightStep,
+    canvasRightMargin = 20,
+    rulerY = 20,
+    currentAlgorithm = 'fcfs',
+    pointPart,
+    totalHeadMovement;
 
-var memoryValue = "KB";
-var processHight = 0;
-var ProcessCount = -1;
-var width = 1000;
-var position = 0;
-var counter = 0;
-//var point = 0;
+var algorithms = {
+    steps: [],
+    calculated: false,
+    currentStep: 0,
+    fcfs: {
+        calculateSteps: function() {
+            console.log('calculate steps');
+            algorithms.calculated = true;
+            algorithms.steps = queue;
+            // TODO
+        },
+        drawNextStep: function() {
+            console.log('draw next step');
+            // TODO
+            algorithms.currentStep++;
 
-function Process(){
-	this.name = "";
-	this.memory = 0;
-	this.ProcessId = 0;
-}
-
-$(document).ready(function () {
-    $('h3').textillate({ in: { effect: 'fadeIn' } });
-    changeName();
-    $('.disk').hide();
-
-    createDisk('Test1', 100, 53);
-
-    $('#name').keyup(function(){changeName()});
-	$('#name2').keyup(function(){changeProcessName()});
-
-    $('#create-disk').click(function() {
-        createDisk($('#name').val(), $('#memory div select').val());
-    });
-
-    $('#new-point-button').click(function() {
-        var value = $('#new-point-value').val();
-        addPoint(value);
-    });
-
-});
-
-function createDisk(diskName, memory, startingPosition) {
-    if(diskName == "" || diskName == null) {
-        diskName = ("Fancy Pancy disk");
-    }
-    disk.name = diskName;
-    disk.memory = memory;
-    disk.position = startingPosition;
-    $('.disk').show();
-    createLineSegments();
-    $('#new-disk-button').hide();
-    $('#disk-name-heading').text(diskName);
-    $('#disk-name-heading').textillate({ in: { effect: 'fadeIn' } });
-    addPath(disk.position);
-    addToQueue(disk.position, true);
-}
-
-function addStartingPoint(memory) {
-    $('.point:eq('+ memory +')').css('visibility', 'visible');
-}
-
-function addPoint(memory) {
-    if(validateRange(memory)) {
-        $('.point:eq('+ memory +')').css('visibility', 'visible');
-        drawLine(memory);
-        counter++;
-        addPath(memory);
-        addToQueue(memory);
-    } else {
-        alert('Please enter value that is in range 0 - ' + disk.memory);
-    }
-}
-
-function drawLine(memory) {
-    var length = Math.sqrt(((disk.position - memory) * disk.blockSize)*((disk.position - memory) * disk.blockSize) + (0 - 10)*(0 - 10) + 5);
-    var angle  = Math.atan2(10, (memory - disk.position) * disk.blockSize) * 180 / Math.PI;
-    var transform = 'rotate(' + angle + 'deg)';
-
-    var id = 'line' + counter;
-
-    var line = $('<div>')
-        .addClass('line')
-        .attr('id', id)
-        .css({
-            'position': 'relative',
-            'transform': transform
-        })
-        .width(0)
-        .offset({left: Math.min(disk.position * disk.blockSize, memory * disk.blockSize), top: 0});
-
-    move('#' + id, length);
-
-    disk.position = memory;
-
-    $('#path1').append(line);
-}
-
-function createLineSegments() {
-    disk.blockSize = ($('#ruler1').width() - 2) / disk.memory;
-    for(var i = 0; i < disk.memory; i++) {
-        $('#ruler1').append('<div class="point" style="float: left;"></div>');
-    }
-    $('.point').css('width', disk.blockSize);
-    $('.point').css('visibility', 'hidden');
-    addStartingPoint(0);
-    addStartingPoint(disk.memory);
-}
-
-function changeName() {
-    var name = $('#name').val();
-    if(name == "" || name == null) {
-        $('#disk-name').text("Fancy Pancy disk");
-    } else {
-        $('#disk-name').text(name);
-    }
-}
-
-function validateRange(data) {
-    if(data == parseInt(data, 10)) {
-        if(data >= 0 && data <= disk.memory) {
-            return true;
+        },
+        drawFinish: function() {
+            console.log('draw finish');
+            // while possible, drawNextStep... 
         }
     }
-    return false;
-}
+};
 
-function addPath(value) {
-    $('#path1').append('<div class="circle" style="margin-left: '+ (value * disk.blockSize) +'px;"></div>');
-}
+$(document).ready(function () {
+    // Canvas stuff
+    canvas = document.getElementById('canvas');
+    ctx = canvas.getContext("2d");
+    canvasWidthStep = (canvas.width - canvasRightMargin) / 100;
+    canvasHeightStep = (canvas.height - 1) / 100;
+    totalHeadMovement = 0; // TODO
 
-function addToQueue(value, first) {
-    $('.queue').append((first ? '' : ', ') + value);
-}
+    var pointPart = (canvas.height - rulerY) / queue.length;
 
-function move(elem, length) {
+    // Listeners
+    document.getElementById('addToQueue').addEventListener("click", addToQueue);
+    document.getElementById('nextStepLink').addEventListener("click", drawNextStep);
+    document.getElementById('toEndLink').addEventListener("click", drawFinish);
+    document.getElementById('radio1').addEventListener("change", selectAlgorithm);
+    document.getElementById('radio2').addEventListener("change", selectAlgorithm);
+    document.getElementById('radio3').addEventListener("change", selectAlgorithm);
+    document.getElementById('radio4').addEventListener("change", selectAlgorithm);
+    document.getElementById('radio5').addEventListener("change", selectAlgorithm);
 
-    var left = 0
+    // Sortable queue
+    editableList = Sortable.create(document.getElementById('queueList'), {
+        animation: 50,
+        handle: ".drag-handle", // draggable icon
+        filter: '.js-remove', // class of element for row removal
+        onFilter: function(e) {
+            // removing from queue array
+            var index = queue.indexOf(getDigit(e.item));
+            if (index > -1) { // if found
+                queue.splice(index, 1);
+            }
 
-    function frame() {
-        left++  // update parameters
-        $(elem).width(left);// show frame
-        if (left >= length)  // check finish condition
-        clearInterval(id)
+            // removing the HTML element
+            var item = e.item;
+            if (item && item.parentNode) {
+                item.parentNode.removeChild(item);
+            }
+
+            // redraw canvas
+            initCanvas();
+        },
+        onUpdate: function(e) {
+            updateQueue();
+            initCanvas();
+        }
+    });
+});
+
+var addToQueue = function() {
+    var addToQueueNumber = document.getElementById('addToQueueNumber');
+    var number = addToQueueNumber.value;
+
+    // validation for min/max or already existing
+    if ((number < minQueue) || (number > maxQueue) 
+            || (queue.indexOf(number) !== -1) || (number == '') || !isNumber(number)) {
+        alert('Enter a unique numeric value from ' + minQueue + ' to ' + maxQueue + '.');
+        addToQueueNumber.value = ''; // clear input
+        return;
     }
 
-    var id = setInterval(frame, 1) // draw every 10ms
-}
+    // pushing into global queue array
+    queue.push(number); 
+
+    // adding to queue editable list
+    var newLi = document.createElement('li');
+    newLi.innerHTML = '<span class="drag-handle">☰</span>\n' + number 
+                        + '\n<i class="js-remove">✖</i>';
+    editableList.el.appendChild(newLi);
+
+    // clear the input field
+    addToQueueNumber.value = '';
+
+    // redrawing the canvas
+    initCanvas();
+
+    return;
+};
+
+var getDigit = function(el) {
+    return /\d+/.exec(el.innerHTML)[0];
+};
+
+var isNumber = function (n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+};
+
+var clearCanvas = function() {
+    ctx.clearRect (0, 0, canvas.width, canvas.height);
+};
+
+var updateQueue = function() {
+    // go through all childs of queueList and assign to queue
+    var queueList = document.getElementById('queueList');
+
+    for (var i = 0; i < queueList.children.length; i++) {
+        queue[i] = getDigit(queueList.children[i]);
+    };
+};
+
+var initCanvas = function() {
+    clearCanvas();
+
+    // canvas line setup
+    ctx.strokeStyle = 'gray';
+    ctx.lineWidth = 0.5; // 0.5px
+    ctx.font="10px Georgia";
+    pointPart = (canvas.height - rulerY) / queue.length;
+
+    // ruler
+    ctx.beginPath();
+    ctx.moveTo(0, rulerY);
+    ctx.lineTo(canvas.width - canvasRightMargin, rulerY);
+    ctx.closePath();
+    ctx.stroke();
+
+    // vertical lines
+    for (var i = 0; i < queue.length; i++) {
+        ctx.beginPath();
+        ctx.fillText(queue[i], queue[i] * canvasWidthStep, 15);
+        ctx.moveTo(queue[i] * canvasWidthStep, rulerY);
+        ctx.lineTo(queue[i] * canvasWidthStep, canvas.height);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    // horizontal lines
+    for (var i = 0; i < queue.length; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, rulerY + (pointPart * i));
+        ctx.lineTo(canvas.width - canvasRightMargin, rulerY + (pointPart * i));
+        ctx.closePath();
+        ctx.stroke();
+    }
+};
+
+var selectAlgorithm = function(e) {
+    currentAlgorithm = e.target.value;
+    algorithms.calculated = false;
+};
+
+var drawNextStep = function() {
+    if (!currentAlgorithm || (queue.length == 0)) {
+        alert('Select an algorithm and enter queue first!');
+        return false;
+    }
+    algorithms[currentAlgorithm].drawNextStep();
+};
+
+var drawFinish = function() {
+    if (!currentAlgorithm || (queue.length == 0)) {
+        alert('Select an algorithm and enter queue first!');
+        return false;
+    }
+    algorithms[currentAlgorithm].drawFinish();
+};
