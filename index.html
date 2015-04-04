@@ -1,107 +1,81 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>10 pls</title>
-    <script type="application/javascript" src="js/jquery-2.0.2.min.js"></script>
-    <script type="application/javascript" src="js/stats.js"></script>
-    <!--<script type="application/javascript" src="js/background.js"></script>-->
-    <script type="application/javascript" src="js/modernizr-2.6.2.min.js"></script>
-    <script type="application/javascript" src="js/gumby.min.js"></script>
-    <script type="application/javascript" src="js/lettering.js"></script>
-    <script type="application/javascript" src="js/textillate.js"></script>
-    <script type="application/javascript" src="js/main.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/animate.css">
-    <link rel="stylesheet" type="text/css" href="css/background.css">
-    <link rel="stylesheet" type="text/css" href="css/gumby.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>10 pls</title>
+		<script type="application/javascript" src="js/jquery-2.0.2.min.js"></script>
+		<script type="application/javascript" src="js/stats.js"></script>
+		<script type="application/javascript" src="js/modernizr-2.6.2.min.js"></script>
+		<script type="application/javascript" src="js/gumby.min.js"></script>
+		<script type="application/javascript" src="js/lettering.js"></script>
+		<script type="application/javascript" src="js/textillate.js"></script>
+		<script type="application/javascript" src="js/Sortable.min.js"></script>
+		<script type="application/javascript" src="js/main.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/animate.css">
+		<link rel="stylesheet" type="text/css" href="css/background.css">
+		<link rel="stylesheet" type="text/css" href="css/gumby.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+	</head>
+	<body>
 
-</head>
-<body>
-    <div id="canvas-div">
-        <canvas id="canvas"></canvas>
-    </div>
-    <div class="window main">
+	<div class="window">
+		<form>
+			<h2>Disk Management</h1>
+		
+			<fieldset>
+				<legend>Setup</legend>
+				<div class="row">
+					<div class="four columns">
+						<h4>Algorithm</h4>
+						<label for="radio1">
+							<input name="radio" id="radio1" value="fcfs" type="radio" checked="checked">
+							FCFS
+						</label>
+						<label for="radio2">
+							<input name="radio" id="radio2" value="sstf" type="radio">
+							SSTF
+						</label>
+						<label for="radio3">
+							<input name="radio" id="radio3" value="scan" type="radio">
+							SCAN
+						</label>
+						<label for="radio4">
+							<input name="radio" id="radio4" value="cscan" type="radio">
+							C-SCAN
+						</label>
+						<label for="radio5">
+							<input name="radio" id="radio5" value="look" type="radio">
+							LOOK
+						</label>
+					</div>
+					<div class="six columns">
+						<h4>Queue <span class="subtitle">(draggable)</span></h4>
+						<ul id="queueList">
+						</ul>
+						<li class="append field">
+							<input id="addToQueueNumber" class="narrow text input" type="text" placeholder="0-100" />
+							<div class="medium primary btn"><a id="addToQueue" href="#">Add</a></div>
+						</li>
+					</div>
+					<div class="two columns">
+						<h4>Controls</h4>
+						<p class="controls">
+							<a href="#" id="nextStepLink">Next step</a><br/>
+							<a href="#" id="toEndLink">To end</a>
+						</p>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+				<legend>Visualization</legend>
+				<canvas id="canvas" width="750px" height="300px"></canvas>
+				<p>Total head movement: <span id="totalHeadMovement">0</span></p>
+			</fieldset>
+		</form>
+	</div>
 
-        <div style="text-align:center"><h3>disk Management</h3></div>
-        <div class="disk">
-			<div class="row">
-				<h4 id="disk-name-heading"></h4>
-			</div>
-
-            <div class="row">
-                <div class="ten columns centered">
-                    <form>
-                        <ul>
-                            <li class="field">
-                                <input class="xnarrow text input" id="new-point-value" type="text" placeholder="Enter address" />
-                                <p class="btn info medium" id="new-point-button">
-                                    <a href="#">New point</a>
-                                </p>
-                            </li>
-                        </ul>
-                    </form>
-                </div>
-
-                <div class="ten columns centered">
-                    <div class="one columns">Queue:</div>
-                    <div class="eleven columns queue"></div>
-                </div>
-
-
-                <div id="ruler1" class="ten columns centered" style="height: 10px; border-bottom: 1px solid white; overflow: visible;">
-                    <div style="height: 100%; width: 0px; border-right: 1px solid white; float: right;"></div>
-                </div>
-
-                <div id="path1" class="ten columns centered" style="height: 10px;">
-                    <!--<div class="circle"></div>-->
-                </div>
-            </div>
-        </div>
-
-        <p class="btn info medium" id="new-disk-button">
-            <a href="#" gumby-trigger="#modal1" class="switch">New disk</a>
-        </p>
-
-    </div>
-
-    <div class="modal" id="modal1">
-        <div class="content">
-            <a class="close switch" gumby-trigger="|#modal1"><i class="icon-cancel" /></i></a>
-            <div class="row">
-                <div class="ten columns centered text-center">
-                    <h2>Customize disk</h2>
-                    <p></p>
-                </div>
-            </div>
-
-            <form>
-                <fieldset>
-                    <legend id="disk-name">Fancy disk</legend>
-                    <ul>
-                        <li class="field">
-                            <label class="inline" for="name">Name</label>
-                            <input class="wide text input" id="name" type="text" placeholder="Enter disk name" />
-                        </li>
-                        <li class="field">
-                            <label class="inline" for="memory">Memory</label>
-                            <input class="wide text input" id="memory" type="text" placeholder="Enter disk memory" />
-                        </li>
-                    </ul>
-                </fieldset>
-            </form>
-
-            <p class="btn success medium" id="create-disk">
-                <a href="#" gumby-trigger="|#modal1" class="switch">Create</a>
-            </p>
-            <p class="btn danger medium">
-                <a href="#" gumby-trigger="|#modal1" class="switch">Cancel</a>
-            </p>
-        </div>
-    </div>
-
-
-
-
+	<h4 class="footer">OSK 2015</h4>
+  	</section>
 </body>
 </html>
