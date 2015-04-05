@@ -48,6 +48,9 @@ body {
     color: black;
 }
 
+label span {
+    font-weight: bold;
+}
 
 
 /*
