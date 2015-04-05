@@ -187,7 +187,7 @@ var addToQueue = function() {
     addToQueueNumber.value = '';
 
     // redrawing the canvas
-    initCanvas()
+    initCanvas();
 
     // recalculate algorithm head movement
     for(var i = 0; i <= 4; i++) {
@@ -305,6 +305,7 @@ var selectAlgorithm = function(e) {
     for(var i = 2; i <= queue.length; i++) {
         $('#queueList li:nth-child('+i+')').css('color', '#555');
     }
+    initCanvas();
 };
 
 var drawNextStep = function() {
