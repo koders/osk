@@ -31,9 +31,9 @@
 
     this._options = {
       /* Next button label in tooltip box */
-      nextLabel: 'Nâkamais &rarr;',
+      nextLabel: 'NÄkamais &rarr;',
       /* Previous button label in tooltip box */
-      prevLabel: '&larr; Atpakaï',
+      prevLabel: '&larr; AtpakaÄ¼',
       /* Skip button label in tooltip box */
       skipLabel: 'Izlaist',
       /* Done button label in tooltip box */
