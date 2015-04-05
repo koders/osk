@@ -8,8 +8,8 @@ body {
 }
 
 .window {
-    width: 1000px;
-    margin: auto;
+    width: 1200px;
+    margin: 0 auto;
     margin-bottom: 0;
 }
 
@@ -37,19 +37,20 @@ body {
     height: 300px;
 }
 
-.footer {
-    text-align: center;
-    margin: 0 auto;
-    margin-top: 50px;
-    margin-bottom: 20px;
-}
-
 .controls a {
     color: black;
 }
 
 label span {
     font-weight: bold;
+}
+
+.header {
+    padding-left: 20px; 
+    background-color: #4B627F; 
+    color: #fefefe;
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 
