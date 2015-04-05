@@ -10,46 +10,53 @@
 		<script type="application/javascript" src="js/lettering.js"></script>
 		<script type="application/javascript" src="js/textillate.js"></script>
 		<script type="application/javascript" src="js/Sortable.min.js"></script>
+		<script type="application/javascript" src="js/intro.js"></script>
 		<script type="application/javascript" src="js/main.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/animate.css">
 		<link rel="stylesheet" type="text/css" href="css/background.css">
 		<link rel="stylesheet" type="text/css" href="css/gumby.css">
+		<link rel="stylesheet" type="text/css" href="css/introjs.css">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
 
 	<div class="window">
 		<form>
-			<h2>Disk Management</h1>
+			<h1>Diska Pārvaldība</h1>
 		
 			<fieldset>
-				<legend>Setup</legend>
+				<legend>Konfigurācija</legend>
 				<div class="row">
-					<div class="four columns">
-						<h4>Algorithm</h4>
+					<div class="four columns" id="algorithmPanel">
+						<h4>Algoritms</h4>
 						<label for="radio1">
 							<input name="radio" id="radio1" value="fcfs" type="radio" checked="checked">
 							FCFS
+							<span id="radio1span"></span>
 						</label>
 						<label for="radio2">
 							<input name="radio" id="radio2" value="sstf" type="radio">
 							SSTF
+							<span id="radio2span"></span>
 						</label>
 						<label for="radio3">
 							<input name="radio" id="radio3" value="scan" type="radio">
 							SCAN
+							<span id="radio3span"></span>
 						</label>
 						<label for="radio4">
 							<input name="radio" id="radio4" value="cscan" type="radio">
 							C-SCAN
+							<span id="radio4span"></span>
 						</label>
 						<label for="radio5">
 							<input name="radio" id="radio5" value="look" type="radio">
 							LOOK
+							<span id="radio5span"></span>
 						</label>
 					</div>
 					<div class="six columns">
-						<h4>Queue <span class="subtitle">(draggable)</span></h4>
+						<h4>Rinda <span class="subtitle">(pārbīdāma)</span></h4>
 						<ul id="queueList">
 						</ul>
 						<li class="append field">
@@ -58,19 +65,19 @@
 						</li>
 					</div>
 					<div class="two columns">
-						<h4>Controls</h4>
+						<h4>Kontroles</h4>
 						<p class="controls">
-							<a href="#" id="nextStepLink">Next step</a><br/>
-							<a href="#" id="toEndLink">To end</a>
+							<a href="#" id="nextStepLink">Nākamais solis</a><br/>
+							<a href="#" id="toEndLink">Uz beigām</a>
 						</p>
 					</div>
 				</div>
 			</fieldset>
 			
 			<fieldset>
-				<legend>Visualization</legend>
+				<legend>Vizualizācija</legend>
 				<canvas id="canvas" width="750px" height="300px"></canvas>
-				<p>Total head movement: <span id="totalHeadMovement">0</span></p>
+				<p>Kustību skaits: <span id="totalHeadMovement">0</span></p>
 			</fieldset>
 		</form>
 	</div>
