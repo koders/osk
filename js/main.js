@@ -24,14 +24,15 @@ var algorithms = {
             // TODO
         },
         drawNextStep: function() {
-            console.log('draw next step');
-            // TODO
+            if(algorithms.currentStep == queue.length - 1)return;
             algorithms.currentStep++;
-
+            // redrawing the canvas
+            initCanvas();
         },
         drawFinish: function() {
-            console.log('draw finish');
-            // while possible, drawNextStep... 
+            algorithms.currentStep = queue.length - 1;
+            // redrawing the canvas
+            initCanvas();
         }
     }
 };
@@ -89,20 +90,20 @@ var addToQueue = function() {
     var number = addToQueueNumber.value;
 
     // validation for min/max or already existing
-    if ((number < minQueue) || (number > maxQueue) 
-            || (queue.indexOf(number) !== -1) || (number == '') || !isNumber(number)) {
+    if ((number < minQueue) || (number > maxQueue)
+        || (queue.indexOf(number) !== -1) || (number == '') || !isNumber(number)) {
         alert('Enter a unique numeric value from ' + minQueue + ' to ' + maxQueue + '.');
         addToQueueNumber.value = ''; // clear input
         return;
     }
 
     // pushing into global queue array
-    queue.push(number); 
+    queue.push(number);
 
     // adding to queue editable list
     var newLi = document.createElement('li');
-    newLi.innerHTML = '<span class="drag-handle">☰</span>\n' + number 
-                        + '\n<i class="js-remove">✖</i>';
+    newLi.innerHTML = '<span class="drag-handle">â?°</span>\n' + number
+    + '\n<i class="js-remove">â?–</i>';
     editableList.el.appendChild(newLi);
 
     // clear the input field
@@ -119,7 +120,7 @@ var getDigit = function(el) {
 };
 
 var isNumber = function (n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+    return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
 var clearCanvas = function() {
@@ -169,6 +170,20 @@ var initCanvas = function() {
         ctx.closePath();
         ctx.stroke();
     }
+
+    totalHeadMovement = 0;
+    // step lines
+    for (var i = 0; i < algorithms.currentStep; i++) {
+        ctx.beginPath();
+        ctx.moveTo(queue[i] * canvasWidthStep, rulerY + (pointPart * i));
+        ctx.lineTo(queue[i + 1] * canvasWidthStep, rulerY + (pointPart * (i + 1)));
+        totalHeadMovement += Math.abs(queue[i + 1] - queue[i]);
+        ctx.strokeStyle = '#ff0000';
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    $('#totalHeadMovement').text(totalHeadMovement);
 };
 
 var selectAlgorithm = function(e) {
@@ -178,7 +193,7 @@ var selectAlgorithm = function(e) {
 
 var drawNextStep = function() {
     if (!currentAlgorithm || (queue.length == 0)) {
-        alert('Select an algorithm and enter queue first!');
+        alert('Select an algorithm and add items to queue first!');
         return false;
     }
     algorithms[currentAlgorithm].drawNextStep();
@@ -186,7 +201,7 @@ var drawNextStep = function() {
 
 var drawFinish = function() {
     if (!currentAlgorithm || (queue.length == 0)) {
-        alert('Select an algorithm and enter queue first!');
+        alert('Select an algorithm and add items to queue first!');
         return false;
     }
     algorithms[currentAlgorithm].drawFinish();
