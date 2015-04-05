@@ -105,7 +105,7 @@ $(document).ready(function () {
                 intro: "Sveicināti!"
             },
             {
-                element: document.querySelector('#algorithmPanel'),
+                element: document.querySelector('#algorithmPicker'),
                 intro: "Izvēlies algoritmu."
             }
         ]
@@ -121,13 +121,15 @@ $(document).ready(function () {
     totalHeadMovement = 0; // TODO
 
     // Listeners
-    document.getElementById('addToQueue').addEventListener("click", addToQueue);
-    document.getElementById('nextStepLink').addEventListener("click", drawNextStep);
-    document.getElementById('toEndLink').addEventListener("click", drawFinish);
-    for(var i = 1; i <= 5; i++) {
-        document.getElementById('radio' + i + '').addEventListener("change", selectAlgorithm);
-        var p = $('radio' + i + '').parent();
-        p.append(' ' + calculateHeadMovement(p.text()));
+    document.getElementById('addToQueue').addEventListener('click', addToQueue);
+    document.getElementById('nextStepLink').addEventListener('click', drawNextStep);
+    document.getElementById('toEndLink').addEventListener('click', drawFinish);
+    document.getElementById('algorithmPicker').addEventListener('change', selectAlgorithm);
+    document.getElementById('diskLength').addEventListener('change', diskLengthValidation);
+
+    for(var i = 0; i <= 4; i++) {
+        var p = $('#opt' + i + '');
+        p.append(' (' + calculateHeadMovement(p.text()) + ')');
     }
 
     // Sortable queue
@@ -185,13 +187,14 @@ var addToQueue = function() {
     addToQueueNumber.value = '';
 
     // redrawing the canvas
-    initCanvas()
+    initCanvas();
 
     // recalculate algorithm head movement
-    for(var i = 1; i <= 5; i++) {
-        var p = $('#radio' + i + '').parent();
-        var text = p.text().trim();
-        $('#radio'+i+'span').text(calculateHeadMovement(text));
+    for(var i = 0; i <= 4; i++) {
+        var p = $('#opt' + i + '');
+        var original = p.text().split(' ')[0];
+
+        p.text(original + ' (' + calculateHeadMovement(p.text()) + ')');
     }
 
     return;
@@ -302,6 +305,7 @@ var selectAlgorithm = function(e) {
     for(var i = 2; i <= queue.length; i++) {
         $('#queueList li:nth-child('+i+')').css('color', '#555');
     }
+    initCanvas();
 };
 
 var drawNextStep = function() {
@@ -351,4 +355,8 @@ function calculateHeadMovement(algorithm) {
         }
     }
     return totalHeadMovement;
-}
+};
+
+var diskLengthValidation = function(e) {
+
+};
