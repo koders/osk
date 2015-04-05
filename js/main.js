@@ -105,7 +105,7 @@ $(document).ready(function () {
                 intro: "Sveicināti!"
             },
             {
-                element: document.querySelector('#algorithmPanel'),
+                element: document.querySelector('#algorithmPicker'),
                 intro: "Izvēlies algoritmu."
             }
         ]
@@ -125,6 +125,7 @@ $(document).ready(function () {
     document.getElementById('nextStepLink').addEventListener('click', drawNextStep);
     document.getElementById('toEndLink').addEventListener('click', drawFinish);
     document.getElementById('algorithmPicker').addEventListener('change', selectAlgorithm);
+    document.getElementById('diskLength').addEventListener('change', diskLengthValidation);
 
     for(var i = 0; i <= 4; i++) {
         var p = $('#opt' + i + '');
@@ -353,4 +354,8 @@ function calculateHeadMovement(algorithm) {
         }
     }
     return totalHeadMovement;
-}
+};
+
+var diskLengthValidation = function(e) {
+
+};
