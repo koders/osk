@@ -8,7 +8,7 @@ var editableList, // sortable queue
     canvasHeightStep,
     canvasRightMargin = 20,
     rulerY = 20,
-    currentAlgorithm = 'fcfs',
+    currentAlgorithm,
     pointPart,
     totalHeadMovement,
     nextPos,
@@ -128,9 +128,9 @@ $(document).ready(function () {
     // Canvas stuff
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext("2d");
-    canvasWidthStep = (canvas.width - canvasRightMargin) / 100;
-    canvasHeightStep = (canvas.height - 1) / 100;
-    totalHeadMovement = 0; // TODO
+    canvasWidthStep = (canvas.width - canvasRightMargin) / maxQueue;
+    canvasHeightStep = (canvas.height - 1) / maxQueue;
+    totalHeadMovement = 0;
 
     // Listeners
     document.getElementById('addToQueue').addEventListener('click', addToQueue);
@@ -180,6 +180,12 @@ var addToQueue = function() {
     if ((number < minQueue) || (number > maxQueue)
         || (queue.indexOf(number) !== -1) || (number == '') || !isNumber(number)) {
         alert('Enter a unique numeric value from ' + minQueue + ' to ' + maxQueue + '.');
+
+        console.log(number);
+        console.log(minQueue, maxQueue);
+        console.log(queue.indexOf(number));
+        console.log(isNumber(number));
+
         addToQueueNumber.value = ''; // clear input
         return;
     }
@@ -313,7 +319,6 @@ var selectAlgorithm = function(e) {
     currentAlgorithm = e.target.value;
     algorithms.calculated = false;
     algorithms.currentStep = 0;
-    clearCanvas();
     for(var i = 2; i <= queue.length; i++) {
         $('#queueList li:nth-child('+i+')').css('color', '#555');
     }
@@ -369,6 +374,44 @@ function calculateHeadMovement(algorithm) {
     return totalHeadMovement;
 };
 
-var diskLengthValidation = function(e) {
+var diskLengthValidation = function() {
 
+    var diskLengthInput = document.getElementById('diskLength');
+    var number = diskLengthInput.value;
+
+    // disk length validation
+    if (!isNumber(number) || number <= minQueue) {
+        alert('Please enter a positive number');
+        diskLengthInput.value = ''; // clear input
+        return;
+    }
+
+    // update max queue
+    maxQueue = parseInt(number);
+
+    // update queue input placeholder
+    var addToQueueNumber = document.getElementById('addToQueueNumber');
+    addToQueueNumber.placeholder = minQueue + ' - ' + maxQueue;
+
+    // recalculate height and width steps
+    canvasWidthStep = (canvas.width - canvasRightMargin) / maxQueue;
+    canvasHeightStep = (canvas.height - 1) / maxQueue;
+
+    // reset queue
+    resetQueue();
+
+    // redraw
+    initCanvas();
+};
+
+var resetQueue = function() {
+    // resetting array
+    queue = [];
+
+    // resetting html queue
+    var queueList = document.getElementById('queueList');
+    queueList.innerHTML = '';
+
+    // resetting steps if already started
+    algorithms.currentStep = 0;
 };
