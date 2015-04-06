@@ -1,5 +1,6 @@
 var editableList, // sortable queue
     queue = [], // array with queue points
+    aQueue = [],
     minQueue = 0,
     maxQueue = 100,
     canvas,
@@ -353,6 +354,21 @@ function calculateHeadMovement(algorithm) {
             totalHeadMovement += Math.abs(nextPos - currentPos);
             currentPos = nextPos;
         }
+    }
+    if(algorithm.toLowerCase().substring(0,4) == 'scan') {
+        totalHeadMovement = parseInt(queue[0]) + (maxQueue - 1);
+    }
+    if(algorithm.toLowerCase().substring(0,6) == 'c-scan') {
+        totalHeadMovement = maxQueue - 1;
+    }
+    if(algorithm.toLowerCase().substring(0,6) == 'c-look') {
+        var min = maxQueue;
+        var max = minQueue;
+        for(var i = 0; i < queue.length; i++) {
+            if(queue[i] < min)min = queue[i];
+            if(queue[i] > max)max = queue[i];
+        }
+        totalHeadMovement = Math.max(max - min - 1, 0);
     }
     return totalHeadMovement;
 };
