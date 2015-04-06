@@ -9,7 +9,7 @@ var editableList, // sortable queue
     canvasHeightStep,
     canvasRightMargin = 20,
     rulerY = 20,
-    currentAlgorithm = 'fcfs',
+    currentAlgorithm,
     pointPart,
     totalHeadMovement,
     nextPos,
@@ -106,8 +106,20 @@ $(document).ready(function () {
                 intro: "Sveicināti!"
             },
             {
-                element: document.querySelector('#algorithmPicker'),
+                element: document.querySelector('#algorithmRow'),
                 intro: "Izvēlies algoritmu."
+            },
+            {
+                element: document.querySelector('#discRow'),
+                intro: "Izvēlies diska maksimālu adresu."
+            },
+            {
+                element: document.querySelector('#queueRow'),
+                intro: "Aizpildi rindu."
+            },
+            {
+                element: document.querySelector('#controlsRow'),
+                intro: "Klikšķino uz Nākamais solis lai redzēt nākamo soli vai Uz beigām lai uzreiz redzēt rezultātu."
             }
         ]
     });
@@ -117,9 +129,9 @@ $(document).ready(function () {
     // Canvas stuff
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext("2d");
-    canvasWidthStep = (canvas.width - canvasRightMargin) / 100;
-    canvasHeightStep = (canvas.height - 1) / 100;
-    totalHeadMovement = 0; // TODO
+    canvasWidthStep = (canvas.width - canvasRightMargin) / maxQueue;
+    canvasHeightStep = (canvas.height - 1) / maxQueue;
+    totalHeadMovement = 0;
 
     // Listeners
     document.getElementById('addToQueue').addEventListener('click', addToQueue);
@@ -169,6 +181,7 @@ var addToQueue = function() {
     if ((number < minQueue) || (number > maxQueue)
         || (queue.indexOf(number) !== -1) || (number == '') || !isNumber(number)) {
         alert('Enter a unique numeric value from ' + minQueue + ' to ' + maxQueue + '.');
+
         addToQueueNumber.value = ''; // clear input
         return;
     }
@@ -178,6 +191,7 @@ var addToQueue = function() {
 
     // adding to queue editable list
     var newLi = document.createElement('li');
+    newLi.className = 'list-inline';
     newLi.innerHTML = '<span class="drag-handle">&#9776;</span>\n' + number
     + '\n<i class="js-remove">&#10006;</i>';
     editableList.el.appendChild(newLi);
@@ -302,7 +316,6 @@ var selectAlgorithm = function(e) {
     currentAlgorithm = e.target.value;
     algorithms.calculated = false;
     algorithms.currentStep = 0;
-    clearCanvas();
     for(var i = 2; i <= queue.length; i++) {
         $('#queueList li:nth-child('+i+')').css('color', '#555');
     }
@@ -373,6 +386,44 @@ function calculateHeadMovement(algorithm) {
     return totalHeadMovement;
 };
 
-var diskLengthValidation = function(e) {
+var diskLengthValidation = function() {
 
+    var diskLengthInput = document.getElementById('diskLength');
+    var number = diskLengthInput.value;
+
+    // disk length validation
+    if (!isNumber(number) || number <= minQueue) {
+        alert('Please enter a positive number');
+        diskLengthInput.value = ''; // clear input
+        return;
+    }
+
+    // update max queue
+    maxQueue = parseInt(number);
+
+    // update queue input placeholder
+    var addToQueueNumber = document.getElementById('addToQueueNumber');
+    addToQueueNumber.placeholder = minQueue + ' - ' + maxQueue;
+
+    // recalculate height and width steps
+    canvasWidthStep = (canvas.width - canvasRightMargin) / maxQueue;
+    canvasHeightStep = (canvas.height - 1) / maxQueue;
+
+    // reset queue
+    resetQueue();
+
+    // redraw
+    initCanvas();
+};
+
+var resetQueue = function() {
+    // resetting array
+    queue = [];
+
+    // resetting html queue
+    var queueList = document.getElementById('queueList');
+    queueList.innerHTML = '';
+
+    // resetting steps if already started
+    algorithms.currentStep = 0;
 };
