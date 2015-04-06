@@ -12,6 +12,7 @@
 	<script type="application/javascript" src="js/Sortable.min.js"></script>
 	<script type="application/javascript" src="js/intro.js"></script>
 	<script type="application/javascript" src="js/main.js"></script>
+	<script type="application/javascript" src="js/canvas.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
 	<link rel="stylesheet" type="text/css" href="css/background.css">
 	<link rel="stylesheet" type="text/css" href="css/gumby.css">
@@ -36,8 +37,9 @@
 								<option value="fcfs" id="opt0">FCFS</option>
 								<option value="sstf" id="opt1">SSTF</option>
 								<option value="scan" id="opt2">SCAN</option>
-								<option value="cscan" id="opt3">C-SCAN</option>
-								<option value="c-look" id="opt4">C-LOOK</option>
+								<option value="c-scan" id="opt3">C-SCAN</option>
+								<option value="look" id="opt4">LOOK</option>
+								<option value="c-look" id="opt5">C-LOOK</option>
 							</select>
 						</div>
 					</div>
@@ -82,7 +84,7 @@
 					</div>
 				</div>
 				<canvas id="canvas" width="750px" height="300px"></canvas>
-				<p>Kustību skaits: <span id="totalHeadMovement">0</span></p>
+				<p>Galvas kustību skaits: <span id="totalHeadMovement">0</span></p>
 			</div>
 
 		</div>

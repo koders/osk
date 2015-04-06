@@ -22,6 +22,7 @@ var algorithms = {
 
     // First Come First Serve
     fcfs: {
+        maxSteps: -1,
         calculateSteps: function() {
             algorithms.calculated = true;
             algorithms.steps = queue;
@@ -32,7 +33,7 @@ var algorithms = {
             return totalHeadMovement;
         },
         drawNextStep: function() {
-            if (algorithms.currentStep == queue.length - 1)return;
+            if (algorithms.currentStep == queue.length + this.maxSteps)return;
             algorithms.currentStep++;
             $('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')').css('color', 'red');
             if(tutorial) {
@@ -54,7 +55,7 @@ var algorithms = {
             initCanvas();
         },
         drawFinish: function() {
-            algorithms.currentStep = queue.length - 1;
+            algorithms.currentStep = queue.length + this.maxSteps;
             // redrawing the canvas
             initCanvas();
             for(var i = 2; i <= queue.length; i++) {
@@ -65,6 +66,7 @@ var algorithms = {
 
     //Shortest Seek Time First
     sstf: {
+        maxSteps: -1,
         calculateSteps: function() {
             algorithms.calculated = true;
             algorithms.steps = queue;
@@ -90,7 +92,7 @@ var algorithms = {
             return totalHeadMovement;
         },
         drawNextStep: function() {
-            if (algorithms.currentStep == queue.length - 1)return;
+            if (algorithms.currentStep == queue.length + this.maxSteps)return;
             algorithms.currentStep++;
             initCanvas();
             if(tutorial) {
@@ -112,7 +114,7 @@ var algorithms = {
             $('#queueList li:nth-child(' + (nextJ + 1) + ')').css('color', 'red');
         },
         drawFinish: function() {
-            algorithms.currentStep = queue.length - 1;
+            algorithms.currentStep = queue.length + this.maxSteps;
             // redrawing the canvas
             initCanvas();
             for(var i = 2; i <= queue.length; i++) {
@@ -123,17 +125,18 @@ var algorithms = {
 
     // SCAN
     scan: {
+        maxSteps: 1,
         calculateSteps: function() {
             algorithms.calculated = true;
             algorithms.steps = queue;
             var totalHeadMovement = 0;
             for (var i = 0; i < queue.length - 1; i++) {
-                totalHeadMovement = parseInt(queue[0]) + (maxQueue - 1);
+                totalHeadMovement = parseInt(queue[0]) + maxQueue;
             }
             return totalHeadMovement;
         },
         drawNextStep: function() {
-            if (algorithms.currentStep == queue.length - 1)return;
+            if (algorithms.currentStep == queue.length + this.maxSteps)return;
             algorithms.currentStep++;
             $('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')').css('color', 'red');
             if(tutorial) {
@@ -155,7 +158,7 @@ var algorithms = {
             initCanvas();
         },
         drawFinish: function() {
-            algorithms.currentStep = queue.length - 1;
+            algorithms.currentStep = queue.length + this.maxSteps;
             // redrawing the canvas
             initCanvas();
             for(var i = 2; i <= queue.length; i++) {
@@ -163,6 +166,151 @@ var algorithms = {
             }
         }
     },
+
+    // Circular SCAN
+    cscan: {
+        maxSteps: 2,
+        calculateSteps: function() {
+            algorithms.calculated = true;
+            algorithms.steps = queue;
+            var totalHeadMovement = 0;
+            for (var i = 0; i < queue.length - 1; i++) {
+                totalHeadMovement = maxQueue;
+            }
+            return totalHeadMovement;
+        },
+        drawNextStep: function() {
+            if (algorithms.currentStep == queue.length + this.maxSteps)return;
+            algorithms.currentStep++;
+            $('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')').css('color', 'red');
+            if(tutorial) {
+                intro = introJs();
+                intro.setOptions({
+                    steps: [
+                        {
+                            element: document.querySelector('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')'),
+                            intro: "Nākamais elements rindā."
+                        },
+                        {
+                            element: document.querySelector('#canvas'),
+                            intro: "Bīdam galvu uz " + queue[algorithms.currentStep] + " pozīciju."
+                        }
+                    ]
+                });
+                intro.start();
+            }
+            initCanvas();
+        },
+        drawFinish: function() {
+            algorithms.currentStep = queue.length + this.maxSteps;
+            // redrawing the canvas
+            initCanvas();
+            for(var i = 2; i <= queue.length; i++) {
+                $('#queueList li:nth-child('+i+')').css('color', 'red');
+            }
+        }
+    },
+
+    // LOOK
+    look: {
+        maxSteps: -1,
+        calculateSteps: function() {
+            algorithms.calculated = true;
+            algorithms.steps = queue;
+            var totalHeadMovement = 0;
+            for (var i = 0; i < queue.length - 1; i++) {
+                var min = maxQueue;
+                var max = minQueue;
+                for(var i = 0; i < queue.length; i++) {
+                    if(queue[i] < min)min = queue[i];
+                    if(queue[i] > max)max = queue[i];
+                }
+                totalHeadMovement = Math.max(queue[0] - min + max - min , 0);
+            }
+            return totalHeadMovement;
+        },
+        drawNextStep: function() {
+            if (algorithms.currentStep == queue.length + this.maxSteps)return;
+            algorithms.currentStep++;
+            $('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')').css('color', 'red');
+            if(tutorial) {
+                intro = introJs();
+                intro.setOptions({
+                    steps: [
+                        {
+                            element: document.querySelector('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')'),
+                            intro: "Nākamais elements rindā."
+                        },
+                        {
+                            element: document.querySelector('#canvas'),
+                            intro: "Bīdam galvu uz " + queue[algorithms.currentStep] + " pozīciju."
+                        }
+                    ]
+                });
+                intro.start();
+            }
+            initCanvas();
+        },
+        drawFinish: function() {
+            algorithms.currentStep = queue.length + this.maxSteps;
+            // redrawing the canvas
+            initCanvas();
+            for(var i = 2; i <= queue.length; i++) {
+                $('#queueList li:nth-child('+i+')').css('color', 'red');
+            }
+        }
+    },
+
+    // Circular LOOK
+    clook: {
+        maxSteps: 0,
+        calculateSteps: function() {
+            algorithms.calculated = true;
+            algorithms.steps = queue;
+            var totalHeadMovement = 0;
+            for (var i = 0; i < queue.length - 1; i++) {
+                var min = maxQueue;
+                var max = minQueue;
+                for(var i = 0; i < queue.length; i++) {
+                    if(queue[i] < min)min = queue[i];
+                    if(queue[i] > max)max = queue[i];
+                }
+                totalHeadMovement = Math.max(max - min - 1, 0);
+            }
+            return totalHeadMovement;
+        },
+        drawNextStep: function() {
+            if (algorithms.currentStep == queue.length + this.maxSteps)return;
+            algorithms.currentStep++;
+            $('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')').css('color', 'red');
+            if(tutorial) {
+                intro = introJs();
+                intro.setOptions({
+                    steps: [
+                        {
+                            element: document.querySelector('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')'),
+                            intro: "Nākamais elements rindā."
+                        },
+                        {
+                            element: document.querySelector('#canvas'),
+                            intro: "Bīdam galvu uz " + queue[algorithms.currentStep] + " pozīciju."
+                        }
+                    ]
+                });
+                intro.start();
+            }
+            initCanvas();
+        },
+        drawFinish: function() {
+            algorithms.currentStep = queue.length + this.maxSteps;
+            // redrawing the canvas
+            initCanvas();
+            for(var i = 2; i <= queue.length; i++) {
+                $('#queueList li:nth-child('+i+')').css('color', 'red');
+            }
+        }
+    },
+
 };
 
 $(document).ready(function () {
@@ -209,7 +357,7 @@ $(document).ready(function () {
     document.getElementById('algorithmPicker').addEventListener('change', selectAlgorithm);
     document.getElementById('diskLength').addEventListener('change', diskLengthValidation);
 
-    for(var i = 0; i <= 4; i++) {
+    for(var i = 0; i <= 5; i++) {
         var p = $('#opt' + i + '');
         p.append(' (' + calculateHeadMovement(p.text()) + ')');
     }
@@ -257,7 +405,7 @@ var addToQueue = function() {
     }
 
     // pushing into global queue array
-    queue.push(number);
+    queue.push(parseInt(number));
 
     // adding to queue editable list
     var newLi = document.createElement('li');
@@ -275,7 +423,7 @@ var addToQueue = function() {
     initCanvas();
 
     // recalculate algorithm head movement
-    for(var i = 0; i <= 4; i++) {
+    for(var i = 0; i <= 5; i++) {
         var p = $('#opt' + i + '');
         var original = p.text().split(' ')[0];
 
@@ -306,140 +454,9 @@ var updateQueue = function() {
     };
 };
 
-var initCanvas = function() {
-    clearCanvas();
-
-    // canvas line setup
-    ctx.strokeStyle = 'gray';
-    ctx.lineWidth = 0.5; // 0.5px
-    ctx.font="10px Georgia";
-    pointPart = (canvas.height - rulerY) / (queue.length - 1);
-
-    // ruler
-    ctx.beginPath();
-    ctx.moveTo(0, rulerY);
-    ctx.lineTo(canvas.width - canvasRightMargin, rulerY);
-    ctx.closePath();
-    ctx.stroke();
-
-    // vertical lines
-    for (var i = 0; i < queue.length; i++) {
-        ctx.beginPath();
-        ctx.fillText(queue[i], queue[i] * canvasWidthStep, 15);
-        ctx.moveTo(queue[i] * canvasWidthStep, rulerY);
-        ctx.lineTo(queue[i] * canvasWidthStep, canvas.height);
-        ctx.closePath();
-        ctx.stroke();
-    }
-
-    // horizontal lines
-    for (var i = 0; i < queue.length - 1; i++) {
-        ctx.beginPath();
-        ctx.moveTo(0, rulerY + (pointPart * i));
-        ctx.lineTo(canvas.width - canvasRightMargin, rulerY + (pointPart * i));
-        ctx.closePath();
-        ctx.stroke();
-    }
-
-    totalHeadMovement = 0;
-    // step lines
-    if(currentAlgorithm == 'fcfs') {
-        for (var i = 0; i < algorithms.currentStep; i++) {
-            ctx.beginPath();
-            ctx.moveTo(queue[i] * canvasWidthStep, rulerY + (pointPart * i));
-            ctx.lineTo(queue[i + 1] * canvasWidthStep, rulerY + (pointPart * (i + 1)));
-            totalHeadMovement += Math.abs(queue[i + 1] - queue[i]);
-            ctx.strokeStyle = '#ff0000';
-            ctx.closePath();
-            ctx.stroke();
-        }
-    }
-
-    if(currentAlgorithm == 'sstf') {
-        var usedFromQueue = [];
-        var currentPos = queue[0];
-        usedFromQueue[0] = true;
-        for (var i = 0; i < algorithms.currentStep; i++) {
-            var diff = Infinity;
-            for(var j = 1; j < queue.length; j++) {
-                if(!usedFromQueue[j] && diff > Math.abs(queue[j] - currentPos)) {
-                    nextJ = j;
-                    diff = Math.abs(queue[j] - currentPos);
-                }
-            }
-            usedFromQueue[nextJ] = true;
-            nextPos = queue[nextJ];
-            ctx.beginPath();
-            ctx.moveTo(currentPos * canvasWidthStep, rulerY + (pointPart * i));
-            ctx.lineTo(nextPos * canvasWidthStep, rulerY + (pointPart * (i + 1)));
-            totalHeadMovement += Math.abs(nextPos - currentPos);
-            currentPos = nextPos;
-            ctx.strokeStyle = '#ff0000';
-            ctx.closePath();
-            ctx.stroke();
-        }
-    }
-
-    if(currentAlgorithm == 'scan') {
-        var currentPos = nextPos = queue[0];
-        var sortedQueue = [];
-        for(var i = 0; i < queue.length; i++) {
-            sortedQueue[i] = queue[i];
-        }
-        sortedQueue.sort();
-        for(var i = 0; i < sortedQueue.length; i++) {
-            //if(sortedQueue[i] == queue[0])
-        }
-        var phase = 1;
-        for (var i = 0; i < algorithms.currentStep; i++) {
-            if(phase == 1) {
-                while(nextPos > minQueue) {
-                    nextPos--;
-                    if(queueMap[nextPos] && !usedMap[nextPos]) {
-                        usedMap[nextPos] = true;
-                        break;
-                    }
-                }
-                if(nextPos == 0)phase = 2;
-            }
-            //if(next == 0) {
-            //    if(!hasZero) {
-            //        ctx.beginPath();
-            //        ctx.moveTo(currentPos * canvasWidthStep, rulerY + (pointPart * i));
-            //        ctx.lineTo(0, rulerY + (pointPart * (i) + pointPart / 2));
-            //        totalHeadMovement += currentPos;
-            //        currentPos = 0;
-            //        ctx.strokeStyle = '#ff0000';
-            //        ctx.closePath();
-            //        ctx.stroke();
-            //    }
-            //    phase = 2;
-            //}
-            if(phase == 2) {
-                while(nextPos < maxQueue) {
-                    nextPos++;
-                    if(queueMap[nextPos] && !usedMap[nextPos]) {
-                        usedMap[nextPos] = true;
-                        break;
-                    }
-                }
-            }
-            ctx.beginPath();
-            ctx.moveTo(currentPos * canvasWidthStep, rulerY + (pointPart * i));
-            ctx.lineTo(nextPos * canvasWidthStep, rulerY + (pointPart * (i + 1)));
-            totalHeadMovement += Math.abs(nextPos - currentPos);
-            currentPos = nextPos;
-            ctx.strokeStyle = '#ff0000';
-            ctx.closePath();
-            ctx.stroke();
-        }
-    }
-
-    $('#totalHeadMovement').text(totalHeadMovement);
-};
 
 var selectAlgorithm = function(e) {
-    currentAlgorithm = e.target.value;
+    currentAlgorithm = e.target.value.replace('-','');
     algorithms.calculated = false;
     algorithms.currentStep = 0;
     for(var i = 2; i <= queue.length; i++) {
@@ -468,25 +485,15 @@ var drawFinish = function() {
 function calculateHeadMovement(algorithm) {
     var totalHeadMovement = 0;
     if(algorithm == null || queue.length == 0)return 0;
+    var algorithmUncut = algorithm;
     algorithm = algorithm.toLowerCase().substring(0,4);
-    if(algorithm == 'fcfs' || algorithm == 'sstf' || algorithm == 'scan') {
+    if(algorithm == 'fcfs' || algorithm == 'sstf' || algorithm == 'scan' || algorithm == 'look') {
         return algorithms[algorithm].calculateSteps();
     }
-
-    if(algorithm.toLowerCase().substring(0,6) == 'c-scan') {
-        totalHeadMovement = maxQueue - 1;
+    algorithm = algorithmUncut.toLowerCase().substring(0,6).replace('-','');
+    if(algorithm == 'cscan' || algorithm == 'clook') {
+        return algorithms[algorithm].calculateSteps();
     }
-
-    if(algorithm.toLowerCase().substring(0,6) == 'c-look') {
-        var min = maxQueue;
-        var max = minQueue;
-        for(var i = 0; i < queue.length; i++) {
-            if(queue[i] < min)min = queue[i];
-            if(queue[i] > max)max = queue[i];
-        }
-        totalHeadMovement = Math.max(max - min - 1, 0);
-    }
-
     return totalHeadMovement;
 };
 
@@ -534,4 +541,8 @@ var resetQueue = function() {
 
 function toggleTutorial() {
     tutorial = !tutorial;
+}
+
+function sortNumber(a,b) {
+    return a - b;
 }
