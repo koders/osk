@@ -105,8 +105,20 @@ $(document).ready(function () {
                 intro: "Sveicināti!"
             },
             {
-                element: document.querySelector('#algorithmPicker'),
+                element: document.querySelector('#algorithmRow'),
                 intro: "Izvēlies algoritmu."
+            },
+            {
+                element: document.querySelector('#discRow'),
+                intro: "Izvēlies diska maksimālu adresu."
+            },
+            {
+                element: document.querySelector('#queueRow'),
+                intro: "Aizpildi rindu."
+            },
+            {
+                element: document.querySelector('#controlsRow'),
+                intro: "Klikšķino uz Nākamais solis lai redzēt nākamo soli vai Uz beigām lai uzreiz redzēt rezultātu."
             }
         ]
     });
