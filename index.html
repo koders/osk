@@ -42,15 +42,7 @@
 					<h4>Diska max. adrese</h4>
 					<input id="diskLength" class="wide text input" type="text" placeholder="Cipars" value="100"/>
 				</div>
-				<div class="row" id="queueRow">
-					<h4>Rinda <span class="subtitle">(pārbīdāma)</span></h4>
-					<ul id="queueList">
-					</ul>
-					<li class="append field">
-						<input id="addToQueueNumber" class="wide text input" type="text" placeholder="0 - 100" />
-						<div class="medium primary btn"><a id="addToQueue" href="#">Add</a></div>
-					</li>
-				</div>
+
 				<div class="row" id="controlsRow">
 					<h4>Kontroles</h4>
 					<p class="controls">
@@ -59,7 +51,15 @@
 					</p>
 				</div>
 			</div>
-			<div class="nine columns">	
+			<div class="nine columns">
+				<div class="row" id="queueRow">
+					<h4>Rinda <span class="subtitle">(pārbīdāma)</span></h4>
+					<ul id="queueList">
+					</ul>
+
+					<input id="addToQueueNumber" class="narrow text input" type="text" placeholder="0 - 100" />
+					<a id="addToQueue" href="#">Add</a>
+				</div>
 				<canvas id="canvas" width="750px" height="300px"></canvas>
 				<p>Kustību skaits: <span id="totalHeadMovement">0</span></p>
 			</div>

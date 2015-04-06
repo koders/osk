@@ -181,11 +181,6 @@ var addToQueue = function() {
         || (queue.indexOf(number) !== -1) || (number == '') || !isNumber(number)) {
         alert('Enter a unique numeric value from ' + minQueue + ' to ' + maxQueue + '.');
 
-        console.log(number);
-        console.log(minQueue, maxQueue);
-        console.log(queue.indexOf(number));
-        console.log(isNumber(number));
-
         addToQueueNumber.value = ''; // clear input
         return;
     }
@@ -195,6 +190,7 @@ var addToQueue = function() {
 
     // adding to queue editable list
     var newLi = document.createElement('li');
+    newLi.className = 'list-inline';
     newLi.innerHTML = '<span class="drag-handle">&#9776;</span>\n' + number
     + '\n<i class="js-remove">&#10006;</i>';
     editableList.el.appendChild(newLi);

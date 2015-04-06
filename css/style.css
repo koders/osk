@@ -57,3 +57,12 @@ p.controls a:hover {
     color: black;
     text-decoration: underline;
 }
+
+.list-inline {
+    display: inline-block;
+    padding-right: 15px;
+}
+
+h4 {
+    margin-top: 20px;
+}
