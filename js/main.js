@@ -336,11 +336,15 @@ $(document).ready(function () {
             {
                 element: document.querySelector('#controlsRow'),
                 intro: "Izmanto algoritma izpildes vadības paneli."
+            },
+            {
+                element: document.querySelector('#videoButton'),
+                intro: "Ievada video. Cilvēkiem ar vājiem nerviem nav ieteicams skatīties..."
             }
         ]
     });
 
-    //intro.start();
+    intro.start();
     //setTimeout(function(){intro.start()}, 2000);
 
     // Canvas stuff
