@@ -1,13 +1,16 @@
-var initCanvas = function(maxSteps) {
+var initCanvas = function() {
     clearCanvas();
 
     // canvas line setup
     ctx.strokeStyle = 'gray';
     ctx.lineWidth = 0.5; // 0.5px
     ctx.font="10px Georgia";
+    ctx.fillStyle = 'gray';
     //var count = currentAlgorithm == "scan" || currentAlgorithm == "cscan" ? -1 : 1;
     //var count = currentAlgorithm == "clook" ? 0 : count;
-    var count = -algorithms[currentAlgorithm].maxSteps;
+    var count = 0;
+    if(currentAlgorithm)
+        count = -algorithms[currentAlgorithm].maxSteps;
     pointPart = (canvas.height - rulerY) / (queue.length - count);
 
     // ruler
@@ -106,6 +109,15 @@ var initCanvas = function(maxSteps) {
                 currentPos1++;
             }
             nextPos = sortedQueue[currentPos1];
+            ctx.beginPath();
+            ctx.arc(nextPos * canvasWidthStep, rulerY + (pointPart * (i + 1)), 3, 0, 2 * Math.PI);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+            //ctx.lineWidth = 5;
+            //ctx.strokeStyle = 'red';
+            ctx.closePath();
+            ctx.stroke();
+
             ctx.beginPath();
             ctx.moveTo(currentPos * canvasWidthStep, rulerY + (pointPart * i));
             ctx.lineTo(nextPos * canvasWidthStep, rulerY + (pointPart * (i + 1)));
