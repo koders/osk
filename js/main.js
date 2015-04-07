@@ -1,7 +1,7 @@
 var editableList, // sortable queue
     queue = [], // array with queue points
     minQueue = 0,
-    maxQueue = 100,
+    maxQueue = 99,
     canvas,
     ctx,
     canvasWidthStep,
@@ -340,7 +340,7 @@ $(document).ready(function () {
         ]
     });
 
-    intro.start();
+    //intro.start();
     //setTimeout(function(){intro.start()}, 2000);
 
     // Canvas stuff
@@ -352,6 +352,7 @@ $(document).ready(function () {
 
     // Listeners
     document.getElementById('addToQueue').addEventListener('click', addToQueue);
+    document.getElementById('toStartLink').addEventListener('click', replay);
     document.getElementById('nextStepLink').addEventListener('click', drawNextStep);
     document.getElementById('toEndLink').addEventListener('click', drawFinish);
     $('#tutorialLabel span').on('click', toggleTutorial);
@@ -466,6 +467,18 @@ var selectAlgorithm = function(e) {
     initCanvas();
 };
 
+var replay = function() {
+    if (!currentAlgorithm || (queue.length == 0)) {
+        alert('Vispirms izvēlies algoritmu un izveido rindu!');
+        return false;
+    }
+    algorithms.currentStep = 0;
+    initCanvas();
+    for(var i = 2; i <= queue.length; i++) {
+        $('#queueList li:nth-child('+i+')').css('color', '#555555');
+    }
+};
+
 var drawNextStep = function() {
     if (!currentAlgorithm || (queue.length == 0)) {
         alert('Vispirms izvēlies algoritmu un izveido rindu!');
@@ -511,7 +524,7 @@ var diskLengthValidation = function() {
     }
 
     // update max queue
-    maxQueue = parseInt(number) - 1;
+    maxQueue = parseInt(number);
 
     // update queue input placeholder
     var addToQueueNumber = document.getElementById('addToQueueNumber');
