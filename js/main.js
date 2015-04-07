@@ -340,7 +340,8 @@ $(document).ready(function () {
         ]
     });
 
-    setTimeout(function(){intro.start()}, 2000);
+    intro.start();
+    //setTimeout(function(){intro.start()}, 2000);
 
     // Canvas stuff
     canvas = document.getElementById('canvas');
@@ -369,7 +370,7 @@ $(document).ready(function () {
         filter: '.js-remove', // class of element for row removal
         onFilter: function(e) {
             // removing from queue array
-            var index = queue.indexOf(getDigit(e.item));
+            var index = queue.indexOf(parseInt(getDigit(e.item)));
             if (index > -1) { // if found
                 queue.splice(index, 1);
             }
@@ -388,7 +389,7 @@ $(document).ready(function () {
             initCanvas();
         }
     });
-    $('.header').textillate({ in: { effect: 'flipInX' } });
+    //$('.header').textillate({ in: { effect: 'flipInX' } });
 });
 
 var addToQueue = function() {
@@ -467,7 +468,7 @@ var selectAlgorithm = function(e) {
 
 var drawNextStep = function() {
     if (!currentAlgorithm || (queue.length == 0)) {
-        alert('Select an algorithm and add items to queue first!');
+        alert('Vispirms izvēlies algoritmu un izveido rindu!');
         return false;
     }
     algorithms[currentAlgorithm].drawNextStep();
@@ -475,7 +476,7 @@ var drawNextStep = function() {
 
 var drawFinish = function() {
     if (!currentAlgorithm || (queue.length == 0)) {
-        alert('Select an algorithm and add items to queue first!');
+        alert('Vispirms izvēlies algoritmu un izveido rindu!');
         return false;
     }
     algorithms[currentAlgorithm].drawFinish();
@@ -504,13 +505,13 @@ var diskLengthValidation = function() {
 
     // disk length validation
     if (!isNumber(number) || number <= minQueue) {
-        alert('Please enter a positive number');
+        alert('Ievadi pozitīvu skaitli');
         diskLengthInput.value = ''; // clear input
         return;
     }
 
     // update max queue
-    maxQueue = parseInt(number);
+    maxQueue = parseInt(number) - 1;
 
     // update queue input placeholder
     var addToQueueNumber = document.getElementById('addToQueueNumber');

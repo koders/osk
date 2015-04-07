@@ -20,6 +20,7 @@ var initCanvas = function() {
     ctx.closePath();
     ctx.stroke();
 
+    console.log(queue);
     // vertical lines
     for (var i = 0; i < queue.length; i++) {
         ctx.beginPath();
