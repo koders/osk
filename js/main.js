@@ -138,24 +138,31 @@ var algorithms = {
         drawNextStep: function() {
             if (algorithms.currentStep == queue.length + this.maxSteps)return;
             algorithms.currentStep++;
-            $('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')').css('color', 'red');
+            initCanvas();
             if(tutorial) {
                 intro = introJs();
+                var introText;
+                if(nextPos != minQueue && nextPos != maxQueue)
+                    introText = "Skenējam... nākamā adrese ir " + nextPos + ", bīdam galvu uz " + nextPos + " pozīciju.";
+                if(nextPos == minQueue)
+                    introText = "Skenējam... Sasniedzam " + minQueue + " un neatrodam nevienu adresi, griežamies apkārt un sākam skenēt uz otru pusi.";
+                if(nextPos == maxQueue)
+                    introText = "Skenējam... Sasniedzam " + maxQueue + " un neatrodam nevienu adresi, esam pabeiguši skenēšanu.";
                 intro.setOptions({
                     steps: [
-                        {
-                            element: document.querySelector('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')'),
-                            intro: "Nākamais elements rindā."
-                        },
+                        //{
+                        //    element: document.querySelector('#queueList li:nth-child(' + (nextJ + 1) + ')'),
+                        //    intro: "Nākamais tuvākais neizmantotais elements."
+                        //},
                         {
                             element: document.querySelector('#canvas'),
-                            intro: "Bīdam galvu uz " + queue[algorithms.currentStep] + " pozīciju."
+                            intro: introText
                         }
                     ]
                 });
                 intro.start();
             }
-            initCanvas();
+            $('#queueList li:nth-child(' + (queue.indexOf(nextPos) + 1) + ')').css('color', 'red');
         },
         drawFinish: function() {
             algorithms.currentStep = queue.length + this.maxSteps;
@@ -182,24 +189,33 @@ var algorithms = {
         drawNextStep: function() {
             if (algorithms.currentStep == queue.length + this.maxSteps)return;
             algorithms.currentStep++;
-            $('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')').css('color', 'red');
+            initCanvas();
             if(tutorial) {
                 intro = introJs();
+                var introText;
+                if(nextPos != maxQueue)
+                    introText = "Skenējam... nākamā adrese ir " + nextPos + ", bīdam galvu uz " + nextPos + " pozīciju.";
+                if(nextPos == minQueue)
+                    introText = "Pārlecam uz " + minQueue;
+                if(nextPos == maxQueue)
+                    introText = "Skenējam... Sasniedzam " + maxQueue + " un neatrodam nevienu adresi";
+                if(algorithms.currentStep == queue.length + this.maxSteps)
+                    introText = "Skenējam... Esam atraduši visas rindas adreses, tāpēc beidzam skenēšanu";
                 intro.setOptions({
                     steps: [
-                        {
-                            element: document.querySelector('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')'),
-                            intro: "Nākamais elements rindā."
-                        },
+                        //{
+                        //    element: document.querySelector('#queueList li:nth-child(' + (nextJ + 1) + ')'),
+                        //    intro: "Nākamais tuvākais neizmantotais elements."
+                        //},
                         {
                             element: document.querySelector('#canvas'),
-                            intro: "Bīdam galvu uz " + queue[algorithms.currentStep] + " pozīciju."
+                            intro: introText
                         }
                     ]
                 });
                 intro.start();
             }
-            initCanvas();
+            $('#queueList li:nth-child(' + (queue.indexOf(nextPos) + 1) + ')').css('color', 'red');
         },
         drawFinish: function() {
             algorithms.currentStep = queue.length + this.maxSteps;
@@ -232,24 +248,30 @@ var algorithms = {
         drawNextStep: function() {
             if (algorithms.currentStep == queue.length + this.maxSteps)return;
             algorithms.currentStep++;
-            $('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')').css('color', 'red');
+            initCanvas();
             if(tutorial) {
                 intro = introJs();
+                var introText;
+                introText = "Meklējam... nākamā adrese ir " + nextPos + ", bīdam galvu uz " + nextPos + " pozīciju.";
+                if(nextPos == minElement(queue))
+                    introText = "Meklējam... nākamais elements ir " + nextPos + ", tālāk pa kreisi vairs nav neviena adrese, tāpēc griežamies apkārt un sākam meklēt uz otru pusi.";
+                if(algorithms.currentStep == queue.length + this.maxSteps)
+                    introText = "Meklējam... nākamais elements ir " + nextPos + ", tālāk pa labi vairs nav neviena adrese, tāpēc esam beiguši meklēšanu";
                 intro.setOptions({
                     steps: [
-                        {
-                            element: document.querySelector('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')'),
-                            intro: "Nākamais elements rindā."
-                        },
+                        //{
+                        //    element: document.querySelector('#queueList li:nth-child(' + (nextJ + 1) + ')'),
+                        //    intro: "Nākamais tuvākais neizmantotais elements."
+                        //},
                         {
                             element: document.querySelector('#canvas'),
-                            intro: "Bīdam galvu uz " + queue[algorithms.currentStep] + " pozīciju."
+                            intro: introText
                         }
                     ]
                 });
                 intro.start();
             }
-            initCanvas();
+            $('#queueList li:nth-child(' + (queue.indexOf(nextPos) + 1) + ')').css('color', 'red');
         },
         drawFinish: function() {
             algorithms.currentStep = queue.length + this.maxSteps;
@@ -263,7 +285,7 @@ var algorithms = {
 
     // Circular LOOK
     clook: {
-        maxSteps: 0,
+        maxSteps: -1,
         calculateSteps: function() {
             algorithms.calculated = true;
             algorithms.steps = queue;
@@ -282,24 +304,30 @@ var algorithms = {
         drawNextStep: function() {
             if (algorithms.currentStep == queue.length + this.maxSteps)return;
             algorithms.currentStep++;
-            $('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')').css('color', 'red');
+            initCanvas();
             if(tutorial) {
                 intro = introJs();
+                var introText;
+                introText = "Meklējam... nākamais elements ir " + nextPos + ", bīdam galvu uz " + nextPos + " pozīciju.";
+                if(nextPos == minElement(queue))
+                    introText = "Tālāk pa labi vairs nav neviena lasāma adrese, tāpēc lecam uz mazāko adresi.";
+                if(algorithms.currentStep == queue.length + this.maxSteps)
+                    introText = "Meklējam... nākamais elements ir " + nextPos + ", bīdam galvu uz " + nextPos + " pozīciju. Esam nolasījuši visus elementus, tāpēc beidzam meklēšanu";
                 intro.setOptions({
                     steps: [
-                        {
-                            element: document.querySelector('#queueList li:nth-child(' + (algorithms.currentStep + 1) + ')'),
-                            intro: "Nākamais elements rindā."
-                        },
+                        //{
+                        //    element: document.querySelector('#queueList li:nth-child(' + (nextJ + 1) + ')'),
+                        //    intro: "Nākamais tuvākais neizmantotais elements."
+                        //},
                         {
                             element: document.querySelector('#canvas'),
-                            intro: "Bīdam galvu uz " + queue[algorithms.currentStep] + " pozīciju."
+                            intro: introText
                         }
                     ]
                 });
                 intro.start();
             }
-            initCanvas();
+            $('#queueList li:nth-child(' + (queue.indexOf(nextPos) + 1) + ')').css('color', 'red');
         },
         drawFinish: function() {
             algorithms.currentStep = queue.length + this.maxSteps;
@@ -436,6 +464,9 @@ var addToQueue = function() {
         p.text(original + ' (' + calculateHeadMovement(p.text()) + ')');
     }
 
+    if(currentAlgorithm != "fcfs")
+        replay();
+
     return;
 };
 
@@ -563,4 +594,22 @@ function toggleTutorial() {
 
 function sortNumber(a,b) {
     return a - b;
+}
+
+function minElement(a) {
+    if(a.length == 0) return;
+    var min = a[0];
+    for(var i = 1; i < a.length; i++) {
+        if(a[i] < min)min = a[i];
+    }
+    return min;
+}
+
+function maxElement(a) {
+    if(a.length == 0) return;
+    var max = a[0];
+    for(var i = 1; i < a.length; i++) {
+        if(a[i] > max)max = a[i];
+    }
+    return max;
 }

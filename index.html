@@ -3,7 +3,6 @@
 <head lang="en">
 	<meta charset="UTF-8">
 	<title>10 pls</title>
-	<script src="http://www.youtube.com/player_api"></script>
 	<script type="application/javascript" src="js/jquery-2.0.2.min.js"></script>
 	<script type="application/javascript" src="js/modernizr-2.6.2.min.js"></script>
 	<script type="application/javascript" src="js/gumby.min.js"></script>
@@ -14,8 +13,9 @@
 	<script type="application/javascript" src="js/main.js"></script>
 	<script type="application/javascript" src="js/canvas.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<link rel="stylesheet" type="text/css" href="css/gumby.css">
 	<link rel="stylesheet" type="text/css" href="css/introjs.css">
+	<link rel="stylesheet" type="text/css" href="css/entypo.css">
+	<link rel="stylesheet" type="text/css" href="css/gumby.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
@@ -71,8 +71,14 @@
 					</div>
 				</div>
 
-				<div class="row">
-					<p class="btn danger medium" id="videoButton"><a href="#" class="switch" gumby-trigger="#modal1">Intro video</a></p>
+				<div class="row" id="infoRow">
+					<h4>Informācija</h4>
+					<div class="row">
+						<a id="videoButton" href="#" class="switch" gumby-trigger="#modal1">Intro video</a>
+					</div>
+					<div class="row">
+						<a id="authorsButton" href="#" class="switch" gumby-trigger="#modal2">Par Projektu</a>
+					</div>
 				</div>
 			</div>
 
@@ -92,6 +98,8 @@
 			</div>
 		</div>
 	</div>
+
+
 	<div class="modal" id="modal1">
 		<div class="content">
 			<a class="close switch" gumby-trigger="|#modal1"><i class="icon-cancel" /></i></a>
@@ -100,6 +108,24 @@
 					<article class="youtube video">
 					<iframe id="video" src="https://www.youtube.com/embed/AgEimSpVGyg?rel=0&autoplay=0&autohide=1" frameborder="0" allowfullscreen></iframe>
 				</article>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" id="modal2">
+		<div class="content">
+			<a class="close switch" gumby-trigger="|#modal2"><i class="icon-cancel" /></i></a>
+			<div class="row">
+				<div class="ten columns centered text-center">
+					<h3>Projekta autori</h3>
+					<ul>
+						<li><i class="icon-dot"></i>Rihards Fridrihsons</li>
+						<li><i class="icon-dot"></i>Iļja Gubins</li>
+						<li><i class="icon-dot"></i>Gvido Neilands</li>
+						<li><i class="icon-dot"></i>Эмиль Сюндюков</li>
+						<li><i class="icon-dot"></i>Vitālijs Rakovs</li>
+					</ul>
 				</div>
 			</div>
 		</div>
