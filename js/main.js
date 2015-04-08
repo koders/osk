@@ -443,7 +443,10 @@ $(document).ready(function () {
     //$('.header').textillate({ in: { effect: 'flipInX' } });
 });
 
-var addToQueue = function() {
+var addToQueue = function(e) {
+    // preventing changing of url
+    e.preventDefault();
+
     var addToQueueNumber = document.getElementById('addToQueueNumber');
     var number = addToQueueNumber.value;
 
