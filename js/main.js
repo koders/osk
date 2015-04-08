@@ -443,14 +443,18 @@ $(document).ready(function () {
     //$('.header').textillate({ in: { effect: 'flipInX' } });
 });
 
-var addToQueue = function() {
+var addToQueue = function(e) {
+    // preventing changing of url
+    if (e) {
+        e.preventDefault();
+    }
+
     var addToQueueNumber = document.getElementById('addToQueueNumber');
     var number = addToQueueNumber.value;
 
     // validation for min/max or already existing
-    if ((number < minQueue) || (number > maxQueue)
-        || (queue.indexOf(number) !== -1) || (number == '') || !isNumber(number)) {
-        alert('Enter a unique numeric value from ' + minQueue + ' to ' + maxQueue + '.');
+    if ((number < minQueue) || (number > maxQueue) || (number == '') || !isNumber(number)) {
+        alert('Ievadi skaitli no ' + minQueue + ' līdz ' + maxQueue + '.');
 
         addToQueueNumber.value = ''; // clear input
         return;
@@ -520,7 +524,12 @@ var selectAlgorithm = function(e) {
     initCanvas();
 };
 
-var replay = function() {
+var replay = function(e) {
+    // preventing changing of url
+    if (e) {
+        e.preventDefault();
+    }
+
     algorithms.currentStep = 0;
     initCanvas();
     for(var i = 2; i <= queue.length; i++) {
@@ -528,7 +537,12 @@ var replay = function() {
     }
 };
 
-var drawNextStep = function() {
+var drawNextStep = function(e) {
+    // preventing changing of url
+    if (e) {
+        e.preventDefault();
+    }
+
     if (!currentAlgorithm || (queue.length == 0)) {
         alert('Vispirms izvēlies algoritmu un izveido rindu!');
         return false;
@@ -536,7 +550,12 @@ var drawNextStep = function() {
     algorithms[currentAlgorithm].drawNextStep();
 };
 
-var drawFinish = function() {
+var drawFinish = function(e) {
+    // preventing changing of url
+    if (e) {
+        e.preventDefault();
+    }
+
     if (!currentAlgorithm || (queue.length == 0)) {
         alert('Vispirms izvēlies algoritmu un izveido rindu!');
         return false;
