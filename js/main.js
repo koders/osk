@@ -503,10 +503,6 @@ var selectAlgorithm = function(e) {
 };
 
 var replay = function() {
-    if (!currentAlgorithm || (queue.length == 0)) {
-        alert('Vispirms izvēlies algoritmu un izveido rindu!');
-        return false;
-    }
     algorithms.currentStep = 0;
     initCanvas();
     for(var i = 2; i <= queue.length; i++) {
