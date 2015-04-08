@@ -234,14 +234,24 @@ var algorithms = {
             algorithms.calculated = true;
             algorithms.steps = queue;
             var totalHeadMovement = 0;
-            for (var i = 0; i < queue.length - 1; i++) {
-                var min = maxQueue;
-                var max = minQueue;
-                for(var i = 0; i < queue.length; i++) {
-                    if(queue[i] < min)min = queue[i];
-                    if(queue[i] > max)max = queue[i];
+            var sortedQueue = [];
+            for(var i = 0; i < queue.length; i++) {
+                sortedQueue[i] = queue[i];
+            }
+            sortedQueue.sort(sortNumber);
+            var startingPos;
+            for(var i = 0; i < sortedQueue.length; i++) {
+                if(sortedQueue[i] == queue[0]) {
+                    startingPos = i;
                 }
-                totalHeadMovement = Math.max(queue[0] - min + max - min , 0);
+            }
+            for(var i = startingPos - 1; i >= 0; i--) {
+                totalHeadMovement += sortedQueue[i + 1] - sortedQueue[i];
+            }
+            if(startingPos < sortedQueue.length - 1)
+                totalHeadMovement += sortedQueue[startingPos + 1] - sortedQueue[0];
+            for(var i = startingPos + 1; i < sortedQueue.length - 1; i++) {
+                totalHeadMovement += sortedQueue[i + 1] - sortedQueue[i];
             }
             return totalHeadMovement;
         },
@@ -290,14 +300,22 @@ var algorithms = {
             algorithms.calculated = true;
             algorithms.steps = queue;
             var totalHeadMovement = 0;
-            for (var i = 0; i < queue.length - 1; i++) {
-                var min = maxQueue;
-                var max = minQueue;
-                for(var i = 0; i < queue.length; i++) {
-                    if(queue[i] < min)min = queue[i];
-                    if(queue[i] > max)max = queue[i];
+            var sortedQueue = [];
+            for(var i = 0; i < queue.length; i++) {
+                sortedQueue[i] = queue[i];
+            }
+            sortedQueue.sort(sortNumber);
+            var startingPos;
+            for(var i = 0; i < sortedQueue.length; i++) {
+                if(sortedQueue[i] == queue[0]) {
+                    startingPos = i;
                 }
-                totalHeadMovement = Math.max(max - min - 1, 0);
+            }
+            for(var i = startingPos; i < sortedQueue.length - 1; i++) {
+                totalHeadMovement += sortedQueue[i + 1] - sortedQueue[i];
+            }
+            for(var i = 0; i < startingPos - 1; i++) {
+                totalHeadMovement += sortedQueue[i + 1] - sortedQueue[i];
             }
             return totalHeadMovement;
         },
